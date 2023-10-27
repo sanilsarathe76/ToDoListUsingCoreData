@@ -51,16 +51,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         present(alert, animated: true)
     }
     
-    @objc private func onUpdateAt(name: ToDoListItem) {
-        let alert = UIAlertController(title: "New Item", message: "Enter new item", preferredStyle: .alert)
+    @objc private func onUpdateAt(item: ToDoListItem) {
+        let alert = UIAlertController(title: "Update Data", message: "Enter new data", preferredStyle: .alert)
         
-        alert.addTextField(configurationHandler: nil)
+        alert.addTextField { (textField) in
+            textField.text = "\(item.name ?? "")"
+        }
         
         alert.addAction(UIAlertAction(title: "Update", style: .cancel, handler: { _ in
             guard let field = alert.textFields?.first, let text = field.text, !text.isEmpty else {
                 return
             }
-            CoreDataOperations.shared.updateItem(item: name, newName: text)
+            CoreDataOperations.shared.updateItem(item: item, newName: text)
         }))
         present(alert, animated: true)
     }
@@ -88,7 +90,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
         let update = UIContextualAction(style: .normal, title: "update") { (contextualAction, view, boolValue) in
-            self.onUpdateAt(name: self.models[indexPath.row])
+            self.onUpdateAt(item: self.models[indexPath.row])
         }
         return UISwipeActionsConfiguration(actions: [delete, update])
     }
