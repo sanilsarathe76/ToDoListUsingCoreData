@@ -52,7 +52,7 @@ class CoreDataOperations {
     
     func deleteItem(item: ToDoListItem) {
         context.delete(item)
-        delegate?.reloadData(id: item.id ?? UUID())
+        delegate?.reloadData(id: UUID())
         do {
             try context.save()
         } catch let error {
